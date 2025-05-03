@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/session";
-import SignOutLink from "./signOutLink";
+import { signOut as signOutAction } from "./actions";
 
 export default async function Home() {
     const session = await getSession();
@@ -15,7 +15,9 @@ export default async function Home() {
     return (
         <div>
             <p>{`you're logged in, ${session.username}!`}</p>
-            <SignOutLink />
+            <a onClick={signOutAction} href="#">
+                Log Off
+            </a>
         </div>
     );
 }
