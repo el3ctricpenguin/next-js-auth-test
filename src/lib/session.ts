@@ -1,18 +1,20 @@
 import { isProduction } from "@/constants";
 import { SignJWT, jwtVerify } from "jose";
-import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 const SECRET = new TextEncoder().encode(process.env.SESSION_SECRET);
 const cookiesPath = "token";
 
-export async function createSession(res: NextResponse, userId: string) {
+export async function createSession(username: string) {
     const sessionHours = 2;
-    const token = await new SignJWT({ userId })
+    const token = await new SignJWT({ username })
         .setProtectedHeader({ alg: "HS256", typ: "JWT" })
         .setExpirationTime(`${sessionHours}h`)
         .sign(SECRET);
 
-    res.cookies.set(cookiesPath, token, {
+    const cookieStore = await cookies();
+
+    cookieStore.set(cookiesPath, token, {
         httpOnly: true,
         secure: isProduction,
         sameSite: "lax",
@@ -21,17 +23,19 @@ export async function createSession(res: NextResponse, userId: string) {
     });
 }
 
-export async function getSession(req: NextRequest) {
-    const token = req.cookies.get(cookiesPath)?.value;
+export async function getSession() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(cookiesPath)?.value;
     if (!token) return null;
     try {
         const { payload } = await jwtVerify(token, SECRET);
-        return payload as { userId: string };
+        return payload as { username: string };
     } catch {
         return null;
     }
 }
 
-export async function clearSession(res: NextResponse) {
-    res.cookies.delete(cookiesPath);
+export async function clearSession() {
+    const cookieStore = await cookies();
+    return cookieStore.delete(cookiesPath);
 }
