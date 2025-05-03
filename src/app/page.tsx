@@ -7,6 +7,7 @@ export default async function Home() {
         return (
             <div>
                 <p>{"you're not logged in"}</p>
+                <a href="/sign-in">Sign In</a>
                 <a href="/sign-up">Sign Up</a>
             </div>
         );
