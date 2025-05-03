@@ -7,8 +7,7 @@ export default async function Home() {
         return (
             <div>
                 <p>{"you're not logged in"}</p>
-                <a href="/sign-in">Sign In</a>
-                <a href="/sign-up">Sign Up</a>
+                <a href="/sign-in">Sign In</a> <a href="/sign-up">Sign Up</a>
             </div>
         );
     }
@@ -16,7 +15,7 @@ export default async function Home() {
         <div>
             <p>{`you're logged in, ${session.username}!`}</p>
             <a onClick={signOutAction} href="#">
-                Log Off
+                Sign Off
             </a>
         </div>
     );
