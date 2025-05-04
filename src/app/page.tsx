@@ -13,6 +13,9 @@ export default async function Home() {
                 <p>
                     <a href="/test">API Test</a>
                 </p>
+                <p>
+                    <a href="/private">user only page</a>
+                </p>
             </div>
         );
     }
@@ -21,11 +24,14 @@ export default async function Home() {
             <p>{`you're logged in, ${session.username}!`}</p>
             <p>
                 <a onClick={signOutAction} href="#">
-                    Sign Off
+                    Sign Out
                 </a>
             </p>
             <p>
                 <a href="/test">API Test</a>
+            </p>
+            <p>
+                <a href="/private">user only page</a>
             </p>
         </div>
     );
