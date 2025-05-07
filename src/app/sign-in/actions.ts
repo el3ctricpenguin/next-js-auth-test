@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import bcrypt from "bcrypt";
 
 export const signIn = async (formData: FormData) => {
     let success = false;
@@ -12,7 +13,8 @@ export const signIn = async (formData: FormData) => {
         const user = await prisma.user.findUnique({
             where: { username },
         });
-        if (!user || password !== user.password) {
+        const isPasswordValid = await bcrypt.compare(password, user?.hashedPassword || "");
+        if (!user || !isPasswordValid) {
             throw new Error("Invalid username or password");
         }
         console.log("User signed in:", user);
